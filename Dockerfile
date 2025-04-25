@@ -1,16 +1,39 @@
-FROM mem0/mem0-api-server:latest
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy custom configuration files if needed
-COPY ./config /app/config
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create volume mount points
+# Clone the Mem0 repository
+RUN git clone https://github.com/mem0ai/mem0.git .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e .
+
+# Install server dependencies
+WORKDIR /app/server
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create volume mount points for SQLite database
 RUN mkdir -p /root/.mem0
+
+# Copy our custom authentication middleware
+COPY ./src/middleware /app/server/middleware
+
+# Add authentication to the server
+RUN echo "\n# Import custom auth middleware\nfrom middleware.auth import apiKeyMiddleware\n\n# Add auth middleware\napp.middleware('http')(apiKeyMiddleware)" >> main.py
 
 # Environment variables will be provided at runtime via .env file
 ENV API_KEY=""
+ENV VECTOR_STORE_TYPE="memory"
 
 # Expose the port
 EXPOSE 8000
