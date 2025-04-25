@@ -1,0 +1,18 @@
+{
+  "vector_store": {
+    "provider": "memory",
+    "config": {
+      "dimension": 1536
+    }
+  },
+  "history_db_path": "/root/.mem0/history.db",
+  "embedding": {
+    "provider": "openai",
+    "model": "text-embedding-3-small",
+    "dimensions": 1536
+  },
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o-mini"
+  }
+}

@@ -31,9 +31,14 @@ COPY ./src/middleware /app/server/middleware
 # Add authentication to the server
 RUN echo "\n# Import custom auth middleware\nfrom middleware.auth import apiKeyMiddleware\n\n# Add auth middleware\napp.middleware('http')(apiKeyMiddleware)" >> main.py
 
+# Create a custom config file to ensure we use SQLite
+RUN mkdir -p /app/config
+COPY ./config/mem0_config.json /app/config/mem0_config.json
+
 # Environment variables will be provided at runtime via .env file
 ENV API_KEY=""
 ENV VECTOR_STORE_TYPE="memory"
+ENV MEM0_CONFIG_PATH="/app/config/mem0_config.json"
 
 # Expose the port
 EXPOSE 8000

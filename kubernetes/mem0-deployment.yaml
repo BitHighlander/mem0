@@ -30,6 +30,10 @@ spec:
             secretKeyRef:
               name: mem0-secrets
               key: api-key
+        - name: VECTOR_STORE_TYPE
+          value: "memory"
+        - name: MEM0_CONFIG_PATH
+          value: "/app/config/mem0_config.json"
         volumeMounts:
         - name: mem0-data
           mountPath: /root/.mem0
