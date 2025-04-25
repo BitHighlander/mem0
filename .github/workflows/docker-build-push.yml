@@ -4,7 +4,8 @@ name: Build and Push Docker Image
 # to DigitalOcean Container Registry
 
 on:
-  # Only run this workflow manually to avoid conflicts with existing workflows
+  push:
+    branches: [ sqlite-implementation, main, master ]
   workflow_dispatch:
 
 jobs:
