@@ -1,0 +1,18 @@
+{
+  "name": "mem0-sqlite",
+  "version": "1.0.0",
+  "description": "Mem0 with SQLite vector store for DigitalOcean deployment",
+  "scripts": {
+    "start": "./mem0-startup.sh",
+    "backup": "mkdir -p ./backups && cp ./data/history.db ./backups/history_$(date +%Y%m%d_%H%M%S).db",
+    "docker:build": "docker build -t pioneer/mem0-sqlite:latest .",
+    "docker:tag": "docker tag pioneer/mem0-sqlite:latest registry.digitalocean.com/pioneer/pioneer/mem0-sqlite:latest",
+    "docker:run": "docker run --env-file=.env -p 8000:8000 -v $(pwd)/data:/root/.mem0 pioneer/mem0-sqlite:latest",
+    "docker:push": "docker push registry.digitalocean.com/pioneer/pioneer/mem0-sqlite:latest",
+    "docker:push:all": "npm run docker:build && npm run docker:tag && npm run docker:push",
+    "k8s:deploy": "kubectl apply -f kubernetes/mem0-deployment.yaml",
+    "k8s:create-secrets": "./scripts/create-k8s-secrets.sh"
+  },
+  "author": "",
+  "license": "Apache-2.0"
+}

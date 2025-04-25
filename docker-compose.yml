@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  mem0:
+    image: mem0/mem0-api-server
+    ports:
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - ./data:/root/.mem0
+    env_file:
+      - .env
+    environment:
+      - VECTOR_STORE_TYPE=memory
